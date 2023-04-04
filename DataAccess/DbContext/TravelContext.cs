@@ -10,6 +10,6 @@ namespace DataAccess.DbContext
 
         }
 
-        public DbSet<Driver> Drivers { get; set; }
+        public DbSet<Drivers> Drivers { get; set; }
     }
 }

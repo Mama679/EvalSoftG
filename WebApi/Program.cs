@@ -1,34 +1,48 @@
+using DataAccess;
 using DataAccess.DbContext;
-using DataAccess.Repositories;
-using DataAccess.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using UnitOWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
-/*builder.Services.AddSingleton<IUnitOfWork>(
-    options => new TravelUnitOfWork(builder.Configuration.GetConnectionString("DataBase"))
-    ); */
+builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddDbContext<TravelContext>(
         options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase"))
     );
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton<IUnitOfWork>(
+    option => new UnitOfWork(builder.Configuration.GetConnectionString("DataBase"))
+    );
+
+builder.Services.AddCors(option =>
+{
+    option.AddPolicy("NuevaPolitica", app =>
+    {
+        app.AllowAnyOrigin()
+           .AllowAnyHeader()
+           .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+app.UseCors("NuevaPolitica");
 app.UseHttpsRedirection();
+app.MapControllers();
+
 
 var summaries = new[]
 {
@@ -48,7 +62,7 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 })
 .WithName("GetWeatherForecast");
-
+string connectionString;
 app.Run();
 
 internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)

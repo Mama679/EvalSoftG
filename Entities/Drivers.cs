@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities
 {
-    public class Driver
+    public class Drivers
     {
         [Key]
         [Column(Order = 1)]

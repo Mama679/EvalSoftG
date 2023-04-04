@@ -1,7 +1,21 @@
+using DataAccess.DbContext;
+using DataAccess.Repositories;
+using DataAccess.UnitOfWork;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers();
+/*builder.Services.AddSingleton<IUnitOfWork>(
+    options => new TravelUnitOfWork(builder.Configuration.GetConnectionString("DataBase"))
+    ); */
+builder.Services.AddDbContext<TravelContext>(
+        options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase"))
+    );
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

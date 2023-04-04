@@ -16,9 +16,7 @@ namespace Entities
         [Required]
         [MaxLength(50)]
         public string? First_Name { get; set; }
-
-        [Key]
-        [Column(Order = 2)]
+        
         [Required]
         [MaxLength(20)]
         public string? Ssn { get; set; }
@@ -29,6 +27,8 @@ namespace Entities
         public string? City { get; set; }
         [MaxLength(25)]
         public string? Phone { get; set; }
+        [MaxLength(10)]
+        public string? Zip { get; set; }
         public bool Active { get; set; } = true;
 
 

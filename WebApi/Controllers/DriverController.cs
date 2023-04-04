@@ -32,7 +32,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("GetById/{id: int}")]
+        [Route("GetById/{id:int}")]
         public IActionResult GetById(int id) 
         {
             Respuesta objRespuesta = new Respuesta();
@@ -79,7 +79,7 @@ namespace WebApi.Controllers
         public IActionResult Update([FromBody] Drivers driver)
         {
             Respuesta objRespuesta = new Respuesta();
-            if (!ModelState.IsValid && _unitOfWork.Driver.Update(driver))
+            if (ModelState.IsValid && _unitOfWork.Driver.Update(driver))
             {
                 objRespuesta.Exito = 1;
                 objRespuesta.Mensaje = "Register store";

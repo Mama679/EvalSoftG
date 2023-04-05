@@ -14,6 +14,7 @@ namespace Entities
         public int Driver_Id { get; set; }
         [ForeignKey("Driver_Id")]
         public virtual Drivers? Drive { get; set; }
+        public bool Active { get; set; }
         public int Vehicle_Id { get; set; }
         [ForeignKey("Vehicle_Id")]
         public virtual Vehicles? Vehicle { get; set; }

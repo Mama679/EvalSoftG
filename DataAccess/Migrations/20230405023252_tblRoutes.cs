@@ -18,7 +18,8 @@ namespace DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Driver_Id = table.Column<int>(type: "int", nullable: false),
-                    Vehicle_Id = table.Column<int>(type: "int", nullable: false)
+                    Vehicle_Id = table.Column<int>(type: "int", nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

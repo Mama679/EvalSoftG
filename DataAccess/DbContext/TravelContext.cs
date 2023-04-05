@@ -11,5 +11,6 @@ namespace DataAccess.DbContext
         }
 
         public DbSet<Drivers> Drivers { get; set; }
+        public DbSet<Vehicles> Vehicles { get; set; }
     }
 }

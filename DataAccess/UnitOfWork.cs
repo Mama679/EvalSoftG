@@ -8,7 +8,9 @@ namespace DataAccess
         public UnitOfWork(string connectionString)
         {
             Driver = new DriverRepository(connectionString);
+            Vehicle = new VehicleRepository(connectionString);
         }
         public IDriverRepository Driver { get; private set; }
+        public IVehicleRepository Vehicle { get; private set; }
     }
 }

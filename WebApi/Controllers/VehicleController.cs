@@ -1,17 +1,18 @@
 ﻿using Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UnitOWork;
 using WebApi.Helpers;
 
 namespace WebApi.Controllers
 {
-    [Route("api/driver")]
+    [Route("api/vehicle")]
     [ApiController]
-    public class DriverController : ControllerBase
+    public class VehicleController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public DriverController(IUnitOfWork unitOfWork)
+        public VehicleController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -21,10 +22,10 @@ namespace WebApi.Controllers
         public IActionResult GelAll()
         {
             Respuesta objRespuesta = new Respuesta();
-            var lstDrivers = _unitOfWork.Driver.GetList().ToList();
-            
+            var lstVehicles = _unitOfWork.Vehicle.GetList().ToList();
+
             objRespuesta.Exito = 1;
-            objRespuesta.Data = lstDrivers;
+            objRespuesta.Data = lstVehicles;
             objRespuesta.StateCode = StatusCodes.Status200OK;
 
             return Ok(objRespuesta);
@@ -32,11 +33,11 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("GetById/{id:int}")]
-        public IActionResult GetById(int id) 
+        public IActionResult GetById(int id)
         {
             Respuesta objRespuesta = new Respuesta();
-            var driver = _unitOfWork.Driver.GetById(id);
-            if(driver == null)
+            var vehicle = _unitOfWork.Vehicle.GetById(id);
+            if (vehicle == null)
             {
                 objRespuesta.Exito = 0;
                 objRespuesta.Mensaje = "Not found register.";
@@ -47,14 +48,14 @@ namespace WebApi.Controllers
             objRespuesta.Exito = 1;
             objRespuesta.Mensaje = "Found Register.";
             objRespuesta.StateCode = StatusCodes.Status200OK;
-            objRespuesta.Data = driver;
+            objRespuesta.Data = vehicle;
 
             return Ok(objRespuesta);
         }
 
         [HttpPost]
         [Route("Insert")]
-        public IActionResult Insert([FromBody] Drivers driver)
+        public IActionResult Insert([FromBody] Vehicles vehicle)
         {
             Respuesta objRespuesta = new Respuesta();
             if (!ModelState.IsValid)
@@ -65,7 +66,7 @@ namespace WebApi.Controllers
                 return BadRequest(objRespuesta);
             }
 
-            int idnew = _unitOfWork.Driver.Insert(driver);
+            int idnew = _unitOfWork.Vehicle.Insert(vehicle);
             objRespuesta.Exito = 1;
             objRespuesta.Mensaje = "Register store";
             objRespuesta.Data = idnew;
@@ -75,33 +76,33 @@ namespace WebApi.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public IActionResult Update([FromBody] Drivers driver)
+        public IActionResult Update([FromBody] Vehicles vehicle)
         {
             Respuesta objRespuesta = new Respuesta();
-            if (ModelState.IsValid && _unitOfWork.Driver.Update(driver))
+            if (ModelState.IsValid && _unitOfWork.Vehicle.Update(vehicle))
             {
                 objRespuesta.Exito = 1;
                 objRespuesta.Mensaje = "Register store";
-                objRespuesta.Data = driver;
+                objRespuesta.Data = vehicle;
                 objRespuesta.StateCode = StatusCodes.Status201Created;
                 return Ok(objRespuesta);
             }
             objRespuesta.Exito = 0;
             objRespuesta.Mensaje = "Error updated Driver";
             objRespuesta.StateCode = StatusCodes.Status400BadRequest;
-            return BadRequest(objRespuesta);        
+            return BadRequest(objRespuesta);
         }
 
         [HttpDelete]
         [Route("delete")]
-        public IActionResult Delete([FromBody] Drivers driver)
+        public IActionResult Delete([FromBody] Vehicles vehicle)
         {
             Respuesta objRespuesta = new Respuesta();
-            if (driver.Id > 0)
+            if (vehicle.Id > 0)
             {
                 objRespuesta.Exito = 1;
                 objRespuesta.Mensaje = "Register deleted.";
-                objRespuesta.Data = _unitOfWork.Driver.Delete(driver);
+                objRespuesta.Data = _unitOfWork.Vehicle.Delete(vehicle);
                 objRespuesta.StateCode = StatusCodes.Status200OK;
                 return Ok(objRespuesta);
             }

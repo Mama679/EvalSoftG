@@ -10,8 +10,8 @@ namespace Entities
         [Required]
         public int Week_Num { get; set; }
         [Required]
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime Ends { get; set; }
         public bool Active { get; set; }
         public int Route_Id { get; set;}
         [ForeignKey("Route_Id")]

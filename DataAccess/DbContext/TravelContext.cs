@@ -12,5 +12,8 @@ namespace DataAccess.DbContext
 
         public DbSet<Drivers> Drivers { get; set; }
         public DbSet<Vehicles> Vehicles { get; set; }
+        public DbSet<Routes> Routes { get; set; }
+        public DbSet<Schedules> Schedules { get; set; }
+        public DbSet<Users> Users { get; set; }
     }
 }

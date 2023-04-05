@@ -6,5 +6,8 @@ namespace UnitOWork
     {
         IDriverRepository Driver { get; }
         IVehicleRepository Vehicle { get; }
+        IRouteRepository Route { get; }
+        ISheduleRepository Shedule { get; }
+        IUserRepository User { get; }
     }
 }

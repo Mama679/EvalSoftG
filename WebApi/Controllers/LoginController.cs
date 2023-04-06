@@ -8,7 +8,7 @@ using WebApi.Helpers;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class LoginController : ControllerBase
     {

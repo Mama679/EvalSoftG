@@ -1,7 +1,10 @@
 using DataAccess;
 using DataAccess.DbContext;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using UnitOWork;
+using WebApi.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,22 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
+var tokenProvider = new JwtProvider("issue", "audience", "SoftGEval");
+//JWT
+builder.Services.AddSingleton<ITokenProvider>(tokenProvider);
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = tokenProvider.GetTokenValidationParameters();
+                });
+
+builder.Services.AddAuthorization(auth => {
+    auth.DefaultPolicy = new AuthorizationPolicyBuilder()
+                            .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                            .RequireAuthenticatedUser()
+                            .Build();
+});
 
 builder.Services.AddDbContext<TravelContext>(
         options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase"))
@@ -41,6 +60,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("NuevaPolitica");
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 
@@ -62,7 +83,7 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 })
 .WithName("GetWeatherForecast");
-string connectionString;
+
 app.Run();
 
 internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)

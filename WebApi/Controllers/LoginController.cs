@@ -22,10 +22,10 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("login")]
-        public IActionResult GetToken([FromBody] Users userLogin)
+        public IActionResult GetToken([FromBody] VMUser userLogin)
         {
             string clave = Encript.GetSHA256(userLogin.Password);
-            var user = _unitOfWork.User.Authenticate(userLogin.UserLogin, clave);
+            var user = _unitOfWork.User.Authenticate(userLogin.NomUser, clave);
             Respuesta respuesta = new Respuesta();
             if (user == null)
             {

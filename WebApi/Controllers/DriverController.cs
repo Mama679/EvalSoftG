@@ -93,22 +93,25 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete]
-        [Route("delete")]
-        public IActionResult Delete([FromBody] Drivers driver)
+        [Route("delete/{id:int}")]
+        public IActionResult Delete(int id)
         {
             Respuesta objRespuesta = new Respuesta();
-            if (driver.Id > 0)
+            var driver = _unitOfWork.Driver.GetById(id);
+            if (driver == null)
             {
-                objRespuesta.Exito = 1;
-                objRespuesta.Mensaje = "Register deleted.";
-                objRespuesta.Data = _unitOfWork.Driver.Delete(driver);
-                objRespuesta.StateCode = StatusCodes.Status200OK;
-                return Ok(objRespuesta);
+                objRespuesta.Exito = 0;
+                objRespuesta.Mensaje = "Not found register.";
+                objRespuesta.StateCode = StatusCodes.Status404NotFound;
+                return BadRequest(objRespuesta);
             }
-            objRespuesta.Exito = 0;
-            objRespuesta.Mensaje = "Error, Register no deleted.";
-            objRespuesta.StateCode = StatusCodes.Status404NotFound;
-            return BadRequest(objRespuesta);
+
+            driver.Active = false;             
+            objRespuesta.Exito = 1;
+            objRespuesta.Mensaje = "Register deleted.";
+            objRespuesta.Data = _unitOfWork.Driver.delDriver(driver.Id,driver.Active);
+            objRespuesta.StateCode = StatusCodes.Status200OK;
+            return Ok(objRespuesta);           
         }
     }
 }

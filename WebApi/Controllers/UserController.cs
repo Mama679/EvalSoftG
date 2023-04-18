@@ -1,13 +1,17 @@
 ﻿using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.JsonWebTokens;
+using System.Security.Claims;
 using UnitOWork;
+using WebApi.Authentication;
 using WebApi.Helpers;
 
 namespace WebApi.Controllers
 {
     [Route("api/user")]
-    [ApiController]
+     [ApiController]
     public class UserController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -19,9 +23,12 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("GetAll")]
+        [Authorize]
         public IActionResult GelAll()
         {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
             Respuesta objRespuesta = new Respuesta();
+            var stoken = JsonWebtoken.ValidarToken(identity);   
             var lstUsers = _unitOfWork.User.GetList().ToList();
 
             objRespuesta.Exito = 1;

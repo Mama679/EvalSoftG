@@ -19,7 +19,7 @@ namespace DataAccess
             
             using (var conn = new SqlConnection(_connectionString))
             {
-                  return conn.QueryFirst<Users>("Select * From Users Where UserLogin = @user And Password = @password",
+                  return conn.QueryFirstOrDefault<Users>("Select * From Users Where UserLogin = @user And Password = @password",
                        parameters, commandType: System.Data.CommandType.Text);
             }            
         }

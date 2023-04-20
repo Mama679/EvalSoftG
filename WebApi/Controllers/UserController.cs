@@ -11,7 +11,7 @@ using WebApi.Helpers;
 namespace WebApi.Controllers
 {
     [Route("api/user")]
-     [ApiController]
+    [ApiController]
     public class UserController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -22,7 +22,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("GetAll"), Authorize]
+        [Route("getall")]
         public IActionResult GelAll()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;

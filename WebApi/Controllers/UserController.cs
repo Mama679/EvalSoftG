@@ -22,7 +22,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("getall")]
+        [Route("getall"),Authorize]
         public IActionResult GelAll()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;

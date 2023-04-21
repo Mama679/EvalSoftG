@@ -24,7 +24,7 @@ builder.Services.AddSwaggerGen(
             Description = "Please enter a valid token",
             Name = "Authorization",
             Type = SecuritySchemeType.Http,
-            BearerFormat = "JWT",
+           // BearerFormat = "JWT",
             Scheme = "bearer"
         });
         option.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -47,7 +47,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
-    options.RequireHttpsMetadata = false;
+    options.RequireHttpsMetadata = true;
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters()
     {

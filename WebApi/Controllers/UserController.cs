@@ -22,12 +22,13 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("getall"),Authorize]
+        [Route("getall")]
+        [Authorize]
         public IActionResult GelAll()
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            //var identity = HttpContext.User.Identity as ClaimsIdentity;
             Respuesta objRespuesta = new Respuesta();
-            var stoken = JsonWebtoken.ValidarToken(identity);   
+           // var stoken = JsonWebtoken.ValidarToken(identity);   
             var lstUsers = _unitOfWork.User.GetList().ToList();
 
             objRespuesta.Exito = 1;

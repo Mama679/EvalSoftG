@@ -24,10 +24,10 @@ builder.Services.AddSwaggerGen(
             Description = "Please enter a valid token",
             Name = "Authorization",
             Type = SecuritySchemeType.Http,
-           // BearerFormat = "JWT",
+            BearerFormat = "JWT",
             Scheme = "bearer"
         });
-        option.AddSecurityRequirement(new OpenApiSecurityRequirement
+       /* option.AddSecurityRequirement(new OpenApiSecurityRequirement
         {
             {
                 new OpenApiSecurityScheme
@@ -35,35 +35,31 @@ builder.Services.AddSwaggerGen(
                     Reference = new OpenApiReference
                     {
                         Type=ReferenceType.SecurityScheme,
-                        Id="bearer"
+                        Id="Bearer"
                     }
                 },
                 new string[]{}
             }
-        });
+        });*/
     });
+
 builder.Services.AddEndpointsApiExplorer();
 //JWT
+var tokenProvider = new JwtProvider("issue","audience","SoftGEval");
+builder.Services.AddSingleton<ITokenProvider>(tokenProvider);
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(option =>
+                {
+                    option.RequireHttpsMetadata = true;
+                    option.TokenValidationParameters = tokenProvider.GetTokenValidationParameters();
+                });
+
+builder.Services.AddAuthorization(auth =>
 {
-    options.RequireHttpsMetadata = true;
-    options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters()
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-    };
-});
-
-builder.Services.AddAuthorization(auth => {
-    auth.DefaultPolicy = new AuthorizationPolicyBuilder()
-                            .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                            .RequireAuthenticatedUser()
-                            .Build();
+    auth.DefaultPolicy = new AuthorizationPolicyBuilder().AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                                                         .RequireAuthenticatedUser()
+                                                         .Build();
 });
 
 builder.Services.AddDbContext<TravelContext>(
@@ -89,7 +85,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
+    //app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -99,7 +95,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
 
 var summaries = new[]
 {
